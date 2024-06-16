@@ -1,0 +1,7 @@
+ features
+    - create account
+    - create a post
+    - view others posts on your timeline
+    - delete a post
+    - follow and unfollow users
+    - create profile and update it

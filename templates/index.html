@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    <nav class="bg-gray-700 border-gray-200 top-0 w-full h-14 fixed z-10 mb-5">
+        <div class="container mx-auto flex flex-wrap items-center justify-between">
+            <button type="button" class="toggle-btn pt-2" aria-controls="mobile-menu-2" aria-expanded="false">
+                <a href="#" class="">
+                    <img class="object-cover w-10 h-10 mx-2 rounded-full"
+                        src="./static/images/pic.jpeg"
+                        alt="avatar"
+                    />
+                </a>
+            </button>
+    
+            <div class="">
+                <ul class="flex-row flex mt-4">
+                    <!-- <li>
+                        <a href="#" class="text-white text-lg" aria-current="page">Home</a>
+                    </li> -->
+                    <li class="">
+                        <input type='text' placeholder="search"
+                            class='rounded-lg outline-none border-gray-500 py-1 justify-center text-center' />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <p class="text-gray-50">hey there</p>
+
+{% endblock content %}

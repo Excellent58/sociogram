@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+   {% if messages %}
+        {% for message in messages %}
+        <div class="err-modal flex justify-center self-center  z-10 mt-0">
+            <div class="max-w-md bg-red-400 p-2 rounded-md shadow-lg  flex items-center justify-center">
+                <div class="mb-1">
+                    <p class="text-white">{{message}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+   
+
+    <div class="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
+        
+        <div class="flex justify-center self-center  z-10">
+            <div class="p-12 bg-slate-700 mx-auto rounded-2xl w-100 ">
+                <div class="mb-4">
+                    <h3 class="font-semibold text-2xl text-blue-300">Sign in </h3>
+                    <p class="text-blue-200">sign in into your account.</p>
+                </div>
+
+                <form action="" method="POST">
+                    {% csrf_token %} 
+                    <div class="space-y-5">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-blue-100 tracking-wide">Username</label>
+                            <input
+                                class=" w-full bg-slate-200  text-base px-4 py-2 border  border-blue-100 rounded-lg focus:outline-none focus:border-blue-400"
+                                type="text" placeholder="Enter your username" name="username"
+                                required
+                                >
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="mb-5 text-sm font-medium text-blue-100 tracking-wide">
+                                Password
+                            </label>
+                            <input
+                                class="w-full bg-slate-200 content-center text-base px-4 py-2 border  border-blue-100 rounded-lg focus:outline-none focus:to-blue-400"
+                                type="password" placeholder="Enter your password" name="password"
+                                required
+                                >
+                        </div>
+                        
+                        <div>
+                            <button type="submit"
+                                class="w-full flex justify-center bg-slate-900  hover:bg-slate-950 text-blue-400 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
+                                sign in
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+                 
+            </div>
+        </div>
+    </div>
+
+{% endblock content%}
