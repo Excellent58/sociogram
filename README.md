@@ -1,14 +1,15 @@
-<h1 align="center"> Django Social Media app </h1>
+<h1 align="center"> Django Social Media App </h1>
 
 
 ## <a name="introduction">🤖 Introduction</a>
 
-A social media web, built with html tailwindcss and Javascript for handling the user interface, <b>django</b>, <b>python</b> and <b>sqlite</b> for the backend functionality
+A social media web application, built with <b>Html</b>, <b>Tailwindcss</b> and <b>Javascript</b> for handling the user interface, <b>Django</b>, <b>Python</b> and <b>Sqlite3</b> for the backend functionality
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 - Python
 - Django
 - HTML
+- Tailwindcss
 - Sqlite3
 - JavaScript
 
