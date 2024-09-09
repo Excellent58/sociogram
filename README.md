@@ -22,6 +22,3 @@ A social media web application, built with <b>Html</b>, <b>Tailwindcss</b> and <
 - Delete posts
 - Search for other users
 - Follow and Unfollow users
-- simple algorithm for generating post feeds
-
-## <a name="features">🔋 Installation</a>
