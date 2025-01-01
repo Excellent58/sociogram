@@ -20,3 +20,6 @@ def search(request):
 @login_required(login_url='signin')
 def like_unlike_post(request):
     pass
+
+
+# run tailwind - npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
