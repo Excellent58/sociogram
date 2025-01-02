@@ -15,6 +15,10 @@ def follow_unfollow(request):
 def profile(request, pk):
     pass
 
+@login_required(login_url='signin')
+def EditProfile():
+    pass
+
 # allow user to setup his/her profile after registering
 @login_required(login_url='signin')
 def settings(request):
@@ -34,7 +38,6 @@ def login(request):
             messages.info(request, "Invalid Credentials")
             return redirect('login')
     return render(request, 'login.html')
-
 
 def signup(request):
     if request.method == "POST":
