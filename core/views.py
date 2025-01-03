@@ -23,4 +23,3 @@ def like_unlike_post(request):
 
 
 # run tailwind - npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
-;

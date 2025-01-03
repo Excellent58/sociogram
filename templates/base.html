@@ -13,8 +13,42 @@
 
     </head>
     <body class="">
-        <nav class="h-[60px] bg-gray-900">
+        <nav class="h-[60px] bg-gray-900 text-white">
+            <div class="flex items-center  justify-between h-full mx-2">
+                <h2 class="text-xl font-bold">Sociogram</h2>
 
+                <div class="nav-links flex space-x-2">
+                    <div>
+                        <button class="post-btn bg-gray-400 py-2 px-3 text-black rounded-md">New Post</button>
+                    </div>
+                    <div class="relative">
+                        <img 
+                            src="./static/images/pic.jpeg" 
+                            alt="user-avatar"
+                            class="avatar h-10 w-10 rounded-full"
+                        />
+
+                        <div class="dropdown hidden z-10 absolute bg-gray-400 text-black right-4 rounded-md mt-1 divide-y divide-gray-100 w-24 md:w-40">
+                            <ul class="py-2 text-sm text-black font-bold">
+                                <li>
+                                    <a href="" 
+                                        class="block px-4 py-1 hover:text-pink-700 w-full"
+                                    >
+                                        Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" 
+                                        class="block px-4 py-1 hover:text-pink-600 w-full"
+                                    >
+                                        Log Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nav>
         {% block content %}
         {% endblock content %}

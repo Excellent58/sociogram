@@ -20,10 +20,9 @@ def EditProfile():
     pass
 
 # allow user to setup his/her profile after registering
-@login_required(login_url='signin')
-def settings(request):
-    pass
-
+# @login_required(login_url='signin')
+# def settings(request):
+#     pass
 def login(request):
     if request.method == "POST":
         username = request.POST['username']
