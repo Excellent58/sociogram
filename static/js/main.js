@@ -14,7 +14,7 @@ avatar.addEventListener('click', ()=> {
 })
 
 
-// dropdown clickaway functionality
+// dropdown click-away functionality
 document.addEventListener('click', (event) => {
     if (!dropDown.classList.contains('hidden')) {
         if (!dropDown.contains(event.target) && !avatar.contains(event.target)) {
