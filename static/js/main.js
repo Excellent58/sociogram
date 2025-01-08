@@ -1,9 +1,6 @@
 const dropDown = document.querySelector('.dropdown');
 const avatar = document.querySelector('.avatar')
 
-console.log(dropDown)
-console.log(avatar)
-
 // toggle dropdown
 avatar.addEventListener('click', ()=> {
     if (dropDown.classList.contains('hidden')) {
@@ -22,3 +19,22 @@ document.addEventListener('click', (event) => {
         }
     }
 })
+
+//create post modal
+let modal = document.getElementById('modal')
+let postBtn = document.getElementById('post-btn')
+let closeBtn = document.querySelector('.close-btn')
+
+postBtn.onclick = function() {
+    modal.classList.remove('hidden')
+}
+
+closeBtn.onclick = function () {
+    modal.classList.add('hidden')
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.classList.add('hidden')
+    }
+}

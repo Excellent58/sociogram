@@ -11,9 +11,9 @@ def follow_unfollow(request):
     pass
 
 # render user profile
-@login_required(login_url='signin')
-def profile(request, pk):
-    pass
+@login_required(login_url='login')
+def profile(request):#include pk
+    return render(request, 'profile.html')
 
 @login_required(login_url='signin')
 def EditProfile():

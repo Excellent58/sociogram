@@ -1,0 +1,52 @@
+{% load compress %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% compress css %}
+        <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    {% endcompress %}
+</head>
+<body>
+    <div class="flex items-center space-x-2 bg-slate-800 text-white pl-3">
+        <div>
+            <a href="" class="block">
+                <svg class="w-3.5 h-3.5 ms-2 -rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M1 5h12m0 0L9 1m4 4L9 9" />
+                </svg>
+            </a>
+        </div>
+
+        <div>
+            <h2>Excellent Musau</h2>
+            <p>18 posts</p>
+        </div>
+    </div>
+
+    <div class="bg-slate-700 h-screen">
+        <div>
+            <img
+                src="./static/images/back.jpg"
+                class="object-cover w-full"
+                alt="profile background image"
+            />
+        </div>
+        <div
+            class="w-32 h-32 relative border-4 border-white rounded-full"
+        >
+            <img 
+                src="./static/images/pic.jpeg" 
+                class="object-cover" 
+                alt="profile image"
+            />
+        </div>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

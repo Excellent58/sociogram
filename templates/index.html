@@ -1,5 +1,37 @@
 {% extends "base.html" %}
+
 {% block content %}
+    <div id="modal" class="hidden fixed z-[1] left-0 top-0 w-full h-full overflow-auto bg-[rgba(0,0,0,0.4)]">
+        <div class="modal-content bg-slate-800 max-w-md w-full text-white rounded-md mt-[15%] mx-auto px-5 py-">
+            <div class="flex justify-between items-center pt-2">
+                <h1 class="text-lg font-semibold">Create a post</h1>
+                <button>
+                    <span class="close-btn text-[#aaa] float-right font-bold text-xl cursor-pointer">&times;</span>
+                </button>
+            </div>
+            
+
+            <form class="flex flex-col pt-3" enctype="multipart/form-data">
+                <label class="block mb-2 text-lg text-white" for="post-image">Upload image</label>
+                <input 
+                    id="post-image"
+                    placeholder="image" 
+                    class="rounded-md block w-full text-sm cursor-pointer bg-slate-700"
+                    type="file"
+                />
+                <label class="block text-lg text-white mt-2 mb-2" for="caption">caption</label>
+                <textarea name="caption" id="caption" placeholder="What is happening?!"
+                    class="block px-1 w-full text-lg text-white bg-slate-800 border-2 rounded-md border-slate-600 outline-none"
+                    aria-multiline="true"
+                ></textarea>
+                <div class="flex justify-center py-2 pb-3">
+                    <button type="submit" class="py-2 bg-slate-700 w-[100%] rounded-md text-white">Post</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
     <section class="bg-gray-300 h-screen">
         <div class='flex flex-col  md:flex-row md:space-x-4'>
             <div class='border-r border-gray-200 w-full mt-2'>
