@@ -2,22 +2,67 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
-from .models import Profile
+from django.urls import reverse
+from .models import Profile, FollowersCount
+from core.models import Post
 
-
-# follow and unfollow a user
-@login_required(login_url="signin")
-def follow_unfollow(request):
-    pass
 
 # render user profile
-@login_required(login_url='login')
-def profile(request):#include pk
-    return render(request, 'profile.html')
+@login_required(login_url='accounts:login')
+def profile(request, username):
+    pk = User.objects.get(username=username).id
+    user_object = User.objects.get(username=username)
+    user_profile = Profile.objects.get(user=user_object)
+    posts = Post.objects.filter(user=user_object)   
 
-@login_required(login_url='signin')
+    number_of_posts = len(posts)
+    
+    follower = request.user.username
+    user = pk
+
+    if FollowersCount.objects.filter(follower=follower, user=user).first():
+        button_text = 'unfollow'
+    else:
+        button_text = 'follow'
+
+    user_followers = len(FollowersCount.objects.filter(user=pk))
+    user_following = len(FollowersCount.objects.filter(follower=pk))
+    print(f'button: {button_text}')
+
+    context = {
+        "user_object": user_object,
+        "user_profile": user_profile,
+        "user_posts": posts,
+        "number_of_posts": number_of_posts,
+        'button_text': button_text,
+        "user_followers": user_followers,
+        "user_following": user_following,
+    }
+
+    return render(request, 'profile.html', context)
+
+@login_required(login_url='accounts:signin')
 def EditProfile():
     pass
+
+@login_required(login_url='accounts:login')
+def follow(request):
+    if request.method == "POST":
+        follower = request.POST['follower']
+        user = request.POST['user']
+
+        print(f"follower: {follower}, User: {user}")
+
+        if FollowersCount.objects.filter(follower=follower, user=user).first():
+            delete_follower = FollowersCount.objects.get(follower=follower, user=user)
+            delete_follower.delete()
+            return redirect(reverse("accounts:profile", args=[user]))
+        else:
+            new_follower = FollowersCount.objects.create(follower=follower, user=user)
+            new_follower.save()
+            return redirect(reverse('accounts:profile', args=[user]))
+    else:
+        return redirect('/')
 
 # allow user to setup his/her profile after registering
 # @login_required(login_url='signin')
@@ -35,7 +80,7 @@ def login(request):
             return redirect('/')
         else:
             messages.info(request, "Invalid Credentials")
-            return redirect('login')
+            return redirect('accounts:login')
     return render(request, 'login.html')
 
 def signup(request):
@@ -48,10 +93,10 @@ def signup(request):
         if password == password2:
             if User.objects.filter(email=email).exists():
                 messages.info(request, "Email already exists")
-                return redirect("signup")
+                return redirect("accounts:signup")
             elif User.objects.filter(username=username).exists():
                 messages.info(request, "Username already exists")
-                return redirect("signup")
+                return redirect("accounts:signup")
             else:
                 user = User.objects.create_user(
                     username=username, email=email, password=password
@@ -65,15 +110,15 @@ def signup(request):
                     user=user_model, id_user=user_model.id
                 )
                 new_profile.save()
-                return redirect("login")
+                return redirect("core:index")
         else:
             messages.info(request, 'passwords did not match')
-            return redirect('signup')
+            return redirect('accounts:signup')
 
     return render(request, "signup.html")
 
 
-@login_required(login_url="signin")
+@login_required(login_url="accounts:login")
 def logout(request):
     auth.logout(request)
-    return redirect("login")
+    return redirect("accounts:login")

@@ -7,7 +7,7 @@ User = get_user_model()
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100)
     image = models.ImageField(upload_to='post_images')
     text = models.TextField()
     created_at = models.DateField(default=datetime.now)

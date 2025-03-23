@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
+from django.contrib import messages
 
 from itertools import chain
 
@@ -9,14 +10,14 @@ from .models import Post
 import random
 
 
-@login_required(login_url="login")
+@login_required(login_url="accounts:login")
 def index(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = []
+    username = request.user.username
 
     try:
         user_profile = Profile.objects.get(user=user_object)
-        print(f'user profile: ', user_profile)
     except:
         print("profile does not exist")
 
@@ -67,6 +68,7 @@ def index(request):
         request,
         "index.html",
         {
+            "username": username,
             "user_profile": user_profile,
             "posts": feed_list,
             "users_to_follow": suggestions_username_profile_list,
@@ -75,17 +77,29 @@ def index(request):
 
 
 # upload an image
-@login_required(login_url='signin')
-def upload(request):
-    pass
+@login_required(login_url='accounts:signin')
+def create_post(request):
+    if request.method == "POST":
+        current_user = request.user.username
+        image = request.FILES.get('post_image')
+        caption = request.POST['caption']
+
+        new_post = Post.objects.create(user=current_user, image=image, text=caption)
+        new_post.save()
+        messages.success(request, 'Post created successfully')
+
+        return redirect('core:index')
+    else:
+        messages.error(request, 'Post not created')
+        return redirect('core:index')
 
 # search for users through usernames
-@login_required(login_url='signin')
+@login_required(login_url='accounts:signin')
 def search(request):
     # use advanced sql queries to search for user names
     pass
 
-@login_required(login_url='signin')
+@login_required(login_url='accounts:signin')
 def like_unlike_post(request):
     pass
 

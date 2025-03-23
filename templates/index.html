@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if messages %}
+        <div
+            id="message-box" 
+            class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white p-3 rounded shadow-lg"
+        >
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div id="modal" class="hidden fixed z-[1] left-0 top-0 w-full h-full overflow-auto bg-[rgba(0,0,0,0.4)]">
         <div class="modal-content bg-slate-800 max-w-md w-full text-white rounded-md mt-[15%] mx-auto px-5 py-">
             <div class="flex justify-between items-center pt-2">
@@ -11,10 +22,17 @@
             </div>
             
 
-            <form class="flex flex-col pt-3" enctype="multipart/form-data">
+            <form 
+                class="flex flex-col pt-3" 
+                enctype="multipart/form-data"
+                action={% url 'core:post' %}
+                method="post"
+            >
+                {% csrf_token %}
                 <label class="block mb-2 text-lg text-white" for="post-image">Upload image</label>
                 <input 
                     id="post-image"
+                    name='post_image'
                     placeholder="image" 
                     class="rounded-md block w-full text-sm cursor-pointer bg-slate-700"
                     type="file"

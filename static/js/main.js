@@ -1,5 +1,15 @@
 const dropDown = document.querySelector('.dropdown');
 const avatar = document.querySelector('.avatar')
+const messageBox = document.getElementById('message-box')
+console.log(`message box: ${messageBox}`)
+console.log("javascript")
+
+// hide message after 5 seconds
+setTimeout(function () {
+    if (messageBox) {
+        messageBox.style.display = 'none'
+    }
+}, 5000)
 
 // toggle dropdown
 avatar.addEventListener('click', ()=> {

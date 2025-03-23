@@ -13,6 +13,7 @@
 
     </head>
     <body class="">
+        {% block navbar %}
         <nav class="h-[60px] bg-gray-900 text-white">
             <div class="flex items-center  justify-between h-full mx-2">
                 <h2 class="text-xl font-bold">Sociogram</h2>
@@ -31,14 +32,16 @@
                         <div class="dropdown hidden z-10 absolute bg-gray-400 text-black right-4 rounded-md mt-1 divide-y divide-gray-100 w-24 md:w-40">
                             <ul class="py-2 text-sm text-black font-bold">
                                 <li>
-                                    <a href="" 
+                                    <a 
+                                        href={% url 'accounts:profile' username %} 
                                         class="block px-4 py-1 hover:text-pink-700 w-full"
                                     >
                                         Profile
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="" 
+                                    <a 
+                                        href= {% url 'accounts:logout' %}
                                         class="block px-4 py-1 hover:text-pink-600 w-full"
                                     >
                                         Log Out
@@ -50,6 +53,7 @@
                 </div>
             </div>
         </nav>
+        {% endblock navbar%}
         {% block content %}
         {% endblock content %}
 

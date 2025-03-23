@@ -13,7 +13,7 @@
 <body>
     <div class="flex items-center space-x-2 bg-slate-800 text-white pl-3">
         <div>
-            <a href="" class="block">
+            <a href={% url 'core:index' %} class="block">
                 <svg class="w-3.5 h-3.5 ms-2 -rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 14 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -23,8 +23,14 @@
         </div>
 
         <div>
-            <h2>Excellent Musau</h2>
-            <p>18 posts</p>
+            <h2 class="font-bold">{{user_object.first_name}} {{user_object.last_name}}</h2>
+            {% if number_of_posts == 0 %}
+                <span class="font-semibold">No posts</span>
+            {% elif number_of_posts == 1 %}
+                <span class="font-semibold">{{number_of_posts}} Post</span>
+            {% else %}
+                <span class="font-semibold">{{number_of_posts}} Posts</span>
+            {% endif %}
         </div>
     </div>
 
@@ -45,20 +51,20 @@
                 <input 
                     id="back-img" 
                     name="background-img" 
-                    class="rounded-md block w-full text-sm cursor-pointer bg-slate-700 py-1.5"
+                    class="rounded-md block w-full text-sm cursor-pointer"
                     type="file" 
                 />
 
-                <label class="block mb-2 text-lg text-white" for="profile-img">Profile image</label>
+                <label class="block mb-2 text-lg text-white mt-3" for="profile-img">Profile image</label>
                 <input 
                     id="profile-img" 
                     name="profile-img"
                     placeholder="image" 
-                    class="rounded-md block w-full text-sm cursor-pointer bg-slate-700 py-1.5"
+                    class="rounded-md block w-full text-sm cursor-pointer"
                     type="file" 
                 />
 
-                <label class="block mb-2 text-lg text-white" for="name">Name</label>
+                <label class="block mb-2 text-lg text-white mt-3" for="name">Name</label>
                 <input 
                     id="name" 
                     name="name"
@@ -66,7 +72,7 @@
                     class="rounded-md block w-full text-sm cursor-pointer bg-slate-700 py-2 px-1 outline-none"
                 />
 
-                <label class="block mb-2 text-lg text-white" for="bio">Bio</label>
+                <label class="block mb-2 text-lg text-white mt-3" for="bio">Bio</label>
                 <input 
                     id="bio" 
                     name="bio"
@@ -74,7 +80,7 @@
                     class="rounded-md block w-full text-sm cursor-pointer bg-slate-700  py-2 px-1 outline-none" 
                 />
 
-                <label class="block mb-2 text-lg text-white" for="location">Location</label>
+                <label class="block mb-2 text-lg text-white mt-3" for="location">Location</label>
                 <input 
                     id="location" 
                     name="location"
@@ -82,7 +88,7 @@
                     class="rounded-md block w-full text-sm cursor-pointer bg-slate-700  py-2 px-1 outline-none" 
                 />
 
-                <div class="flex justify-center py-2 pb-3">
+                <div class="flex justify-center py-2 pb-3 mt-3">
                     <button type="submit" class="py-2 bg-slate-700 w-[100%] rounded-md text-white">Save</button>
                 </div>
         
@@ -90,48 +96,88 @@
         </div>
     </div>
 
-    <div class="bg-slate-700 h-screen">
+    <div class="bg-slate-700 h-full pb-2">
         <div class="">
             <img
-                src="{% static 'images/back.jpg'%}"
+                src="{{user_profile.profileimg.url}}"
                 class="object-cover w-full h-32"
                 alt="profile background image"
             />
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center mx-4">
             <div
                 class="w-32 h-32 relative border-4 border-slate-800 rounded-md ml-4 -mt-16"
             >
                 <img 
-                    src="{% static 'images/pic.jpeg' %}" 
+                    src="{{user_profile.profileimg.url}}" 
                     class="object-cover" 
                     alt="profile image"
                 />
             </div>
 
             <div>
-                <a href="#" class="edit-btn py-2 px-2 bg-slate-800 text-white rounded-full mr-4">
-                    Edit Profile
-                </a>
+                {% if user_object.username == user.username %}
+                <div>
+                    <a href="#" class="edit-btn py-2 px-2 bg-slate-800 text-white rounded-full mr-4">
+                        Edit Profile
+                    </a>
+                </div>
+                {% else %}
+                    <form
+                        action={% url 'accounts:follow' %}
+                        method="post"
+                    >
+                        {% csrf_token %}
+                        <input type="hidden" value="{{user.username}}" name="follower"/>
+					    <input type="hidden" value="{{user_object.username}}" name="user"/>
+                        <button class="py-2 px-4 bg-slate-800 hover:bg-gray-300 hover:text-black text-white text-lg font-semibold">{{button_text}}</button>
+                    </form>
+                {% endif %}
             </div>
             
         </div>
 
         <div class="text-white ml-4">
-            <h1 class="font-bold text-lg">Wycliffe Musau</h1>
-            <p class="text-lg">bio: philosopher</p>
+            <h1 class="font-bold text-lg">{{user_object.first_name}} {{user_object.last_name}}</h1>
+            {% if user_profile.bio %}
+                <p class="text-lg">bio: {{user_profile.bio}}</p>
+            {% endif%}
+
+            {% if user_profile.location %}
+                <p class="text-lg">Location: {{user_profile.location}}</p>
+            {% endif %}
+
             <div class="flex space-x-4 text-lg">
-                <p><span class="font-bold">300</span> Following</p>
-                <p><span class="font-bold">1000</span> Followers</p>
+                <p><span class="font-bold">{{user_following}}</span class='text-gray-300 font-semibold'> Following</p>
+                {% if user_followers == 1 %}
+                    <p><span class="font-bold">{{user_followers}}</span class='text-gray-300 font-semibold'> Follower</p>
+                {% else %}
+                    <p><span class="font-bold">{{user_followers}}</span class='text-gray-300 font-semibold'> Followers</p>
+                {% endif %}
             </div>
         </div>
 
-        <div class="flex flex-col items-center  mt-4 border-t border-slate-800">
-            <div class="">
-                <h1 class="text-white text-lg font-bold">Posts</h1>
+        <div class="flex flex-col  mt-4 border-t border-slate-800 w-full ml-4">
+            <h1 class="text-white text-lg font-bold mt-2">Posts</h1>
+            <div class="mt-5">
         
-                <div class="post-section border-l border-r border-slate-800">
-                    post 1
+                <div class="post-section text-white">
+                    <ul>
+                        {% for post in user_posts %}
+                            <li>
+                                <a
+                                    href="#"
+                                >
+                                    <p>{{post.text}}</p>
+                                    <img
+                                        src="{{post.image.url}}"
+                                        class="w-[150px] h-[160px]"
+                                        alt='post image'
+                                    />
+                                </a>
+                            <li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
