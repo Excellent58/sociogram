@@ -16,17 +16,19 @@ def profile(request, username):
     posts = Post.objects.filter(user=user_object)   
 
     number_of_posts = len(posts)
-    
+
     follower = request.user.username
-    user = pk
+    user = username
 
     if FollowersCount.objects.filter(follower=follower, user=user).first():
         button_text = 'unfollow'
     else:
         button_text = 'follow'
 
-    user_followers = len(FollowersCount.objects.filter(user=pk))
-    user_following = len(FollowersCount.objects.filter(follower=pk))
+    print(f"user_followers: {len(FollowersCount.objects.filter(user=user))}")
+    print(f"user_following: {len(FollowersCount.objects.filter(follower=user))}")
+    user_followers = len(FollowersCount.objects.filter(user=user))
+    user_following = len(FollowersCount.objects.filter(follower=user))
     print(f'button: {button_text}')
 
     context = {
@@ -55,10 +57,12 @@ def follow(request):
 
         if FollowersCount.objects.filter(follower=follower, user=user).first():
             delete_follower = FollowersCount.objects.get(follower=follower, user=user)
+            print(f"unfollow: {delete_follower}")
             delete_follower.delete()
             return redirect(reverse("accounts:profile", args=[user]))
         else:
             new_follower = FollowersCount.objects.create(follower=follower, user=user)
+            print(f"follow: {new_follower}")
             new_follower.save()
             return redirect(reverse('accounts:profile', args=[user]))
     else:
