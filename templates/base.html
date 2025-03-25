@@ -33,7 +33,7 @@
                             <ul class="py-2 text-sm text-black font-bold">
                                 <li>
                                     <a 
-                                        href={% url 'accounts:profile' username %} 
+                                        href={% url 'accounts:profile' request.user.username %} 
                                         class="block px-4 py-1 hover:text-pink-700 w-full"
                                     >
                                         Profile
