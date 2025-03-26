@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
 </head>
-<body>
+<body class="overflow-x-hidden">
     <div class="flex items-center space-x-2 bg-slate-800 text-white pl-3">
         <div>
             <a href={% url 'core:index' %} class="block">
@@ -35,9 +35,9 @@
     </div>
 
     <div
-        class="modal hidden fixed z-[1] left-0 top-0 w-full h-full overflow-auto bg-[rgba(0,0,0,0.4)]"
+        class="modal hidden fixed z-[1] left-0 top-0 w-full h-full bg-[rgba(0,0,0,0.4)] overflow-y-scroll scrollbar-hide"
     >
-        <div class="modal-content bg-slate-800 max-w-md w-full text-white rounded-md mt-[15%] mx-auto px-5 py-">
+        <div class="modal-content bg-slate-800 max-w-md w-full text-white rounded-md mt-[15%] mx-auto px-5 py-2">
             <div class="flex justify-between items-center pt-2">
                 <h1 class="text-lg font-semibold">Edit Profile</h1>
                 <button type="button">
@@ -46,29 +46,63 @@
             </div>
         
         
-            <form class="flex flex-col pt-3" enctype="multipart/form-data">
+            <form 
+                class="flex flex-col pt-3" 
+                enctype="multipart/form-data"
+                method="post"
+            >
                 <label class="block mb-2 text-lg text-white" for="back-img">Background image</label>
+                {% if user_profile.backgroundimg %}
+                    <p>current file: {{user_profile.backgroundimg}}<p>
+                    <img
+                        src="{{user_profile.backgroundimg.url}}"
+                        alt="profile picture"
+                        class="h-32 w-32"
+                    />
+                {% endif %}
                 <input 
                     id="back-img" 
                     name="background-img" 
-                    class="rounded-md block w-full text-sm cursor-pointer"
+                    class="rounded-md block w-full text-sm cursor-pointer pt-2"
+
                     type="file" 
                 />
-
+ 
                 <label class="block mb-2 text-lg text-white mt-3" for="profile-img">Profile image</label>
+                {% if user_profile.profileimg %}
+                    <p>current file: {{user_profile.profileimg}}<p>
+                    <img
+                        src="{{user_profile.profileimg.url}}"
+                        alt="profile picture"
+                        class="h-32 w-32"
+                    />
+                {% endif %}
                 <input 
                     id="profile-img" 
                     name="profile-img"
+                    value="{{user_profile.profileimg.url}}"
                     placeholder="image" 
-                    class="rounded-md block w-full text-sm cursor-pointer"
+                    class="rounded-md pt-2 block w-full text-sm cursor-pointer"
                     type="file" 
                 />
 
-                <label class="block mb-2 text-lg text-white mt-3" for="name">Name</label>
+                <label class="block mb-2 text-lg text-white mt-3" for="name">First Name</label>
                 <input 
                     id="name" 
-                    name="name"
+                    name="first_name"
                     placeholder="Enter name" 
+
+                    value="{{user_object.first_name}}"
+                    class="rounded-md block w-full text-sm cursor-pointer bg-slate-700 py-2 px-1 outline-none"
+                />
+
+                <label class="block mb-2 text-lg text-white mt-3" for="name">Last Name</label>
+                <input 
+                    id="name" 
+                    name="last_name"
+                    placeholder="Enter name" 
+
+                    value="{{user_object.last_name}}"
                     class="rounded-md block w-full text-sm cursor-pointer bg-slate-700 py-2 px-1 outline-none"
                 />
 
@@ -78,6 +112,7 @@
                     name="bio"
                     placeholder="Enter Bio" 
                     class="rounded-md block w-full text-sm cursor-pointer bg-slate-700  py-2 px-1 outline-none" 
+                    value="{{user_profile.bio}}"
                 />
 
                 <label class="block mb-2 text-lg text-white mt-3" for="location">Location</label>
@@ -86,6 +121,7 @@
                     name="location"
                     placeholder="Enter location" 
                     class="rounded-md block w-full text-sm cursor-pointer bg-slate-700  py-2 px-1 outline-none" 
+                    value="{{user_profile.location}}"
                 />
 
                 <div class="flex justify-center py-2 pb-3 mt-3">

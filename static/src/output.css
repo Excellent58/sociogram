@@ -876,6 +876,14 @@ video {
   overflow: auto;
 }
 
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
 .rounded {
   border-radius: 0.25rem;
 }
@@ -1184,6 +1192,17 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* Hide scrollbar for IE and Edge*/
+  scrollbar-width: none;
+  /*hide scrollbar for firefox*/
+}
+
 .hover\:bg-gray-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
@@ -1265,3 +1284,4 @@ video {
     border-end-start-radius: 0.5rem;
   }
 }
+
