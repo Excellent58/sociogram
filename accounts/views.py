@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from django.urls import reverse
@@ -10,7 +11,6 @@ from core.models import Post
 # render user profile
 @login_required(login_url='accounts:login')
 def profile(request, username):
-    pk = User.objects.get(username=username).id
     user_object = User.objects.get(username=username)
     user_profile = Profile.objects.get(user=user_object)
     posts = Post.objects.filter(user=user_object)   
@@ -44,8 +44,39 @@ def profile(request, username):
     return render(request, 'profile.html', context)
 
 @login_required(login_url='accounts:signin')
-def EditProfile():
-    pass
+def EditProfile(request):
+    try:
+        current_user = request.user.username
+    except:
+        return HttpResponseForbidden("Access Forbidden, you have to be logged in")
+
+    user_object = User.objects.get(username=current_user)
+    user_profile = Profile.objects.get(user=user_object)
+    if request.method == "POST":
+        backgroundimg = request.FILES.get('backgroundimg')
+        profileimg = request.FILES.get("profileimg")
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+        location = request.POST["location"]
+        bio = request.POST["bio"]
+
+        if backgroundimg is not None:
+            user_profile.backgroundimg = backgroundimg
+        if backgroundimg is not None:  
+            user_profile.profileimg = profileimg
+
+        user_profile.location = location
+        user_profile.bio = bio
+
+        user_profile.save()
+
+        user_object.first_name = first_name
+        user_object.last_name = last_name
+        user_object.save()
+
+        messages.info(request, "Profile updated")
+        return redirect(reverse("accounts:profile", args=[current_user]))
+
 
 @login_required(login_url='accounts:login')
 def follow(request):
@@ -57,12 +88,10 @@ def follow(request):
 
         if FollowersCount.objects.filter(follower=follower, user=user).first():
             delete_follower = FollowersCount.objects.get(follower=follower, user=user)
-            print(f"unfollow: {delete_follower}")
             delete_follower.delete()
             return redirect(reverse("accounts:profile", args=[user]))
         else:
             new_follower = FollowersCount.objects.create(follower=follower, user=user)
-            print(f"follow: {new_follower}")
             new_follower.save()
             return redirect(reverse('accounts:profile', args=[user]))
     else:

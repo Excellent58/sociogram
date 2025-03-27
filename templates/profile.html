@@ -11,6 +11,17 @@
     {% endcompress %}
 </head>
 <body class="overflow-x-hidden">
+    {% if messages %}
+        <div
+            id="message-box" 
+            class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white p-3 rounded shadow-lg"
+        >
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="flex items-center space-x-2 bg-slate-800 text-white pl-3">
         <div>
             <a href={% url 'core:index' %} class="block">
@@ -37,7 +48,7 @@
     <div
         class="modal hidden fixed z-[1] left-0 top-0 w-full h-full bg-[rgba(0,0,0,0.4)] overflow-y-scroll scrollbar-hide"
     >
-        <div class="modal-content bg-slate-800 max-w-md w-full text-white rounded-md mt-[15%] mx-auto px-5 py-2">
+        <div class="modal-content bg-slate-800 max-w-[40rem] w-full text-white mt-3 rounded-md mx-auto px-5 py-2">
             <div class="flex justify-between items-center pt-2">
                 <h1 class="text-lg font-semibold">Edit Profile</h1>
                 <button type="button">
@@ -50,7 +61,9 @@
                 class="flex flex-col pt-3" 
                 enctype="multipart/form-data"
                 method="post"
+                action={% url 'accounts:edit' %}
             >
+                {% csrf_token %}
                 <label class="block mb-2 text-lg text-white" for="back-img">Background image</label>
                 {% if user_profile.backgroundimg %}
                     <p>current file: {{user_profile.backgroundimg}}<p>
@@ -62,9 +75,8 @@
                 {% endif %}
                 <input 
                     id="back-img" 
-                    name="background-img" 
+                    name="backgroundimg" 
                     class="rounded-md block w-full text-sm cursor-pointer pt-2"
-
                     type="file" 
                 />
  
@@ -79,9 +91,7 @@
                 {% endif %}
                 <input 
                     id="profile-img" 
-                    name="profile-img"
-                    value="{{user_profile.profileimg.url}}"
-                    placeholder="image" 
+                    name="profileimg" 
                     class="rounded-md pt-2 block w-full text-sm cursor-pointer"
                     type="file" 
                 />
@@ -135,18 +145,18 @@
     <div class="bg-slate-700 h-full pb-2">
         <div class="">
             <img
-                src="{{user_profile.profileimg.url}}"
+                src="{{user_profile.backgroundimg.url}}"
                 class="object-cover w-full h-32"
                 alt="profile background image"
             />
         </div>
         <div class="flex justify-between items-center mx-4">
             <div
-                class="w-32 h-32 relative border-4 border-slate-800 rounded-md ml-4 -mt-16"
+                class="w-32 h-32 relative rounded-md ml-4 -mt-16"
             >
                 <img 
                     src="{{user_profile.profileimg.url}}" 
-                    class="object-cover" 
+                    class="object-cover w-32 h-32 border-4 border-slate-800" 
                     alt="profile image"
                 />
             </div>
@@ -219,6 +229,6 @@
         </div>
     </div>
 
-    <script src="{% static 'js/profile.js' %}"></script>
+    <scriptsrc="{% static 'js/profile.js' %}"></script>
 </body>
 </html>
