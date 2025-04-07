@@ -19,6 +19,5 @@ A social media web application, built with <b>Html</b>, <b>Tailwindcss</b> and <
 - Create new posts
 - Comment on posts
 - Like and Unlike posts
-- Delete posts
 - Search for other users
 - Follow and Unfollow users

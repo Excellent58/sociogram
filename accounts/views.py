@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.auth.models import User, auth
 from django.urls import reverse
 from .models import Profile, FollowersCount
@@ -25,11 +26,8 @@ def profile(request, username):
     else:
         button_text = 'follow'
 
-    print(f"user_followers: {len(FollowersCount.objects.filter(user=user))}")
-    print(f"user_following: {len(FollowersCount.objects.filter(follower=user))}")
     user_followers = len(FollowersCount.objects.filter(user=user))
     user_following = len(FollowersCount.objects.filter(follower=user))
-    print(f'button: {button_text}')
 
     context = {
         "user_object": user_object,
@@ -89,13 +87,17 @@ def follow(request):
         if FollowersCount.objects.filter(follower=follower, user=user).first():
             delete_follower = FollowersCount.objects.get(follower=follower, user=user)
             delete_follower.delete()
-            return redirect(reverse("accounts:profile", args=[user]))
+            is_following = False
+            # return redirect(reverse("accounts:profile", args=[user]))
         else:
             new_follower = FollowersCount.objects.create(follower=follower, user=user)
             new_follower.save()
-            return redirect(reverse('accounts:profile', args=[user]))
-    else:
-        return redirect('/')
+            is_following = True
+            # return redirect(request.path)
+
+        return JsonResponse({"is_following": is_following})
+    # else:
+    #     return redirect(request.path)
 
 # allow user to setup his/her profile after registering
 # @login_required(login_url='signin')

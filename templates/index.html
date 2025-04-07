@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load like_filters %}
 
 {% block content %}
     {% if messages %}
@@ -52,59 +53,127 @@
 
     <section class="bg-gray-300 h-screen">
         <div class='flex flex-col  md:flex-row md:space-x-4'>
-            <div class='border-r border-gray-200 w-full mt-2'>
-                <div class="post-card flex mx-3 py-2 px-2 m-2 rounded-md border-b">
+            <ul class='border-r border-gray-200 w-full mt-2'>
+                {% for post in posts %}
+                <li class="post-card flex mx-3 py-2 px-2 m-2 rounded-md border-b">
                     <div class='flex space-x-2'>
                         <a href="#" class=''>
                             <img 
-                                src='./static/images/pic.jpeg'
+                                src="{{post.profileimg.url}}"
                                 class='rounded-full h-10 w-10'
                                 alt=""
                             />
                         </a>
 
                         <div class='content-section mt-2'>
-                            <h4>username</h4>
-                            <p>my first post on X</p>
-                            <img 
-                                src='./static/images/pic.jpeg'
-                                class='object-cover w-full rounded-lg h-64 md:h-96 md:w-auto md:rounded-s-lg'
-                                alt=""
-                            />
+                            <h4>{{post.user}}</h4>
+                            <p>{{post.text}}</p>
 
-                            <div class='footer'>
+                            {% if post.image.url is not None %}
+                                <img 
+                                    src="{{post.image.url}}"
+                                    class='object-cover w-full rounded-lg h-64 md:h-96 md:w-auto md:rounded-s-lg'
+                                    alt=""
+                                />
+                            {% endif %}
 
+                            <div class='footer flex flex-row space-x-4 mt-2 items-center'>
+                                <div class="flex flex-row items-center space-x-1">
+                                    <svg width="20" height="20" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                                            <g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-360.000000, -255.000000)" fill="#000000">
+                                                <path
+                                                    d="M390,277 C390,278.463 388.473,280 387,280 L379,280 L376,284 L373,280 L365,280 C363.527,280 362,278.463 362,277 L362,260 C362,258.537 363.527,257 365,257 L387,257 C388.473,257 390,258.537 390,260 L390,277 L390,277 Z M386.667,255 L365.333,255 C362.388,255 360,257.371 360,260.297 L360,277.187 C360,280.111 362.055,282 365,282 L371.639,282 L376,287.001 L380.361,282 L387,282 C389.945,282 392,280.111 392,277.187 L392,260.297 C392,257.371 389.612,255 386.667,255 L386.667,255 Z"
+                                                    id="comment-5" sketch:type="MSShapeGroup">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </svg>
+
+                                    <span>{{post.post_comments.count}}</span>
+                                </div>
+
+                                <div class="flex flex-row space-x-1 items-center">                                    
+                                    <a 
+                                        class="like-btn"
+                                        data-post-id="{{ post.id }}"
+                                    >
+                                            <svg 
+                                                class="heart-filled {% if post|user_has_liked:user %}block{% else %}hidden{% endif %} text-pink-500 cursor-pointer transition-transform duration-200 ease-in-out transform scale-100 hover:scale-110"
+                                                fill="currentColor" width="25" height="25" 
+                                                viewBox="0 0 24 24" 
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z" />
+                                            </svg>
+                                    
+                                            <svg 
+                                                class="heart-outline {% if post|user_has_liked:user %}hidden{% else %}block{% endif %} cursor-pointer transition-transform duration-200 ease-in-out transform scale-100 hover:scale-110"
+                                                fill="currentColor" width="25" height="25" 
+                                                viewBox="0 0 24 24" 
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M20.5,4.609A5.811,5.811,0,0,0,16,2.5a5.75,5.75,0,0,0-4,1.455A5.75,5.75,0,0,0,8,2.5,5.811,5.811,0,0,0,3.5,4.609c-.953,1.156-1.95,3.249-1.289,6.66,1.055,5.447,8.966,9.917,9.3,10.1a1,1,0,0,0,.974,0c.336-.187,8.247-4.657,9.3-10.1C22.45,7.858,21.453,5.765,20.5,4.609Zm-.674,6.28C19.08,14.74,13.658,18.322,12,19.34c-2.336-1.41-7.142-4.95-7.821-8.451-.513-2.646.189-4.183.869-5.007A3.819,3.819,0,0,1,8,4.5a3.493,3.493,0,0,1,3.115,1.469,1.005,1.005,0,0,0,1.76.011A3.489,3.489,0,0,1,16,4.5a3.819,3.819,0,0,1,2.959,1.382C19.637,6.706,20.339,8.243,19.826,10.889Z" />
+                                            </svg>
+                                    </a>
+                                    <span 
+                                        id="likes-count-{{ post.id }}"
+                                        class="likes-count"
+                                    >
+                                        {{post.no_of_likes}}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                </div>
-            </div>
-
+                </li>
+                {% endfor %}
+            </ul>
+            
+            {% comment %} who to follow section {% endcomment %}
             <div class='border-2 bg-gray-500 text-white w-[500px] mt-2 rounded-lg h-full flex flex-col justify-center px-3 py-2 md:mr-2'>
                 <h2 class="text-lg font-bold">Who to follow</h2>
+
+                {% for user in users_to_follow %}
                 <div class="flex justify-between items-center border-b border-gray-400 py-1">
                     <div class="flex items-center space-x-1">
-                        <img src="static/images/pic.jpeg" alt="" class="h-10 w-10 rounded-full">
-                        <a href="">username</a>
+                        <img src="{{user.profileimg.url}}" alt="" class="h-10 w-10 rounded-full">
+                        <a 
+                            href={% url 'accounts:profile' user %}
+                            class="hover:underline"
+                        >
+                            {{user}}
+                        </a>
                     </div>
 
-                    <form>
-                        <button type="submit" class="bg-slate-800 text-white px-4 py-1 rounded-lg">Follow</button>
+                    <form
+                        method="post"
+                        class="follow-form"
+                        data-url="{% url 'accounts:follow' %}"
+                    >
+                        {% csrf_token %}
+                        <input
+                            type="hidden"
+                            name="follower"
+                            value="{{request.user.username}}"
+                        />
+                        <input
+                            type="hidden"
+                            name="user"
+                            value="{{user}}"
+                        />
+                        <button type="submit" class="follow-btn bg-slate-800 text-lg text-white px-4 py-1 rounded-lg">Follow</button>
                     </form>
                 </div>
+                {% endfor %}
 
-                <div class="flex justify-between items-center border-b border-gray-400 py-1">
-                    <div class="flex items-center space-x-1">
-                        <img src="static/images/pic.jpeg" alt="" class="h-10 w-10 rounded-full">
-                        <a href="">username</a>
-                    </div>
-                
-                    <form>
-                        <button type="submit" class="bg-slate-800 text-white px-4 py-1 rounded-lg">Follow</button>
-                    </form>
-                </div>
             </div>
         </div>
     </section>
+
 {% endblock content %}
+
+<!-- href="{% url 'core:like-post' %}?post_id={{post.id}}" -->

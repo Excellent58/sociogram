@@ -6,5 +6,6 @@ app_name = "core"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("post/", views.create_post, name='post')
+    path("post/", views.create_post, name='post'),
+    path("like-post/", views.like_post, name='like-post'),
 ]

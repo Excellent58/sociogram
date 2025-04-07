@@ -3,12 +3,13 @@ let editBtn = document.querySelector('.edit-btn')
 let closeModalBtn = document.querySelector('.close-btn')
 const messageBox = document.getElementById('message-box')
 
-console.log("writing js")
-
-editBtn.addEventListener('click', (event)=> {
+if (editBtn) {
+    editBtn.addEventListener('click', (event)=> {
     event.preventDefault()
     editModal.classList.remove('hidden')
 })
+}
+
 
 closeModalBtn.addEventListener('click', ()=> {
     editModal.classList.add('hidden')
@@ -28,3 +29,26 @@ setTimeout(function () {
         messageBox.style.display = 'none'
     }
 }, 5000)
+
+const form = document.querySelector('.follow-form')
+
+form.addEventListener('submit', async function(e) {
+    e.preventDefault(); //prevent full page reload
+
+    const followUrl = form.dataset.url; // <--- grab from data-url
+    console.log(`follow url: ${followUrl}`)
+    const formData = new FormData(form);
+    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const response = await fetch(followUrl, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+        },
+        body: formData
+    });
+
+    const data = await response.json();
+    const button = form.querySelector('.follow-btn');
+    button.textContent = data.is_following ? 'Following' : 'Follow';
+});

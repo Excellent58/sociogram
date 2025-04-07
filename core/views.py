@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.http import JsonResponse
 
 from itertools import chain
 
-from accounts.models import Profile, FollowersCount
-from .models import Post
+from accounts.models import Profile, FollowersCount 
+from .models import Post, LikePost
 import random
 
 
@@ -60,9 +61,12 @@ def index(request):
         username_profile_list.append(profile_lists)
 
     suggestions_username_profile_list = list(chain(*username_profile_list))
-    print(user_profile)
-    print(feed_list)
-    print(suggestions_username_profile_list)
+
+    for post in feed_list:
+        user_object = User.objects.get(username=post.user)
+        user_profile = Profile.objects.get(user=user_object)
+        post.profileimg = user_profile.profileimg
+
 
     return render(
         request,
@@ -100,7 +104,34 @@ def search(request):
     pass
 
 @login_required(login_url='accounts:signin')
-def like_unlike_post(request):
+def like_post(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+
+    if like_filter == None:
+        # like post
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes += 1
+        post.save()
+        liked = True
+    else:
+        # unlike post
+        like_filter.delete()
+        post.no_of_likes -= 1
+        post.save()
+        liked = False
+    
+    return JsonResponse({
+        'liked': liked,
+        'likes_count': post.no_of_likes
+    })
+
+@login_required(login_url='accounts:signin')
+def comment(request):
     pass
 
 
